@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src https://api.github.com; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Download Hotdog</title>
+  <link rel="icon" href="hotdog.png" type="image/png">
+  <style>
+    :root { --bg: #0c1730; --panel: #13254a; --ink: #f2f5fb; --muted: #a9b6d0; --accent: #ffc847; --accent-ink: #1a1300; --line: #24396a; }
+    @media (prefers-color-scheme: light) { :root { --bg: #f3f5fa; --panel: #ffffff; --ink: #14203a; --muted: #5b6781; --line: #dbe2ef; } }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: var(--bg); color: var(--ink); font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: 24px; }
+    main { width: min(560px, 100%); background: var(--panel); border: 1px solid var(--line); border-radius: 22px; padding: 36px 32px; text-align: center; box-shadow: 0 20px 60px rgba(0, 0, 0, .25); }
+    img.logo { width: 112px; height: 112px; border-radius: 26px; }
+    h1 { margin: 14px 0 4px; font-size: 32px; letter-spacing: -.02em; }
+    .tagline { margin: 0; color: var(--muted); }
+    .version { margin: 6px 0 0; color: var(--muted); font-size: 14px; min-height: 1.5em; }
+    a.primary { display: block; margin: 26px 0 8px; padding: 16px 20px; border-radius: 14px; background: var(--accent); color: var(--accent-ink); font-weight: 700; font-size: 18px; text-decoration: none; }
+    a.primary:hover { filter: brightness(1.05); }
+    .hint { margin: 0 0 18px; color: var(--muted); font-size: 14px; }
+    .others { display: grid; gap: 8px; margin-top: 8px; }
+    .others a { display: block; padding: 11px 14px; border: 1px solid var(--line); border-radius: 12px; color: var(--ink); text-decoration: none; }
+    .others a:hover { border-color: var(--accent); }
+    .others a[hidden] { display: none; }
+    details { margin-top: 22px; text-align: left; color: var(--muted); font-size: 14px; }
+    summary { cursor: pointer; color: var(--ink); }
+    details ul { padding-left: 20px; }
+    footer { margin-top: 26px; color: var(--muted); font-size: 13px; }
+    footer a { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <main>
+    <img class="logo" src="hotdog.png" alt="Hotdog">
+    <h1>Hotdog</h1>
+    <p class="tagline">Microwave radio link toolkit by RowCodes</p>
+    <p class="version" id="version"></p>
+
+    <a class="primary" id="primary" href="https://github.com/ubgb/hotdog-releases/releases/latest">Download Hotdog</a>
+    <p class="hint" id="hint">Pick the download for your computer below.</p>
+
+    <div class="others" id="others">
+      <a data-kind="mac-arm" href="https://github.com/ubgb/hotdog-releases/releases/latest/download/Hotdog-Mac-AppleSilicon.dmg">Mac with Apple Silicon (M1 or newer)</a>
+      <a data-kind="mac-intel" href="https://github.com/ubgb/hotdog-releases/releases/latest/download/Hotdog-Mac-Intel.dmg">Mac with Intel</a>
+      <a data-kind="windows" href="https://github.com/ubgb/hotdog-releases/releases/latest/download/Hotdog-Windows.msi">Windows (64-bit)</a>
+    </div>
+
+    <details>
+      <summary>How to install</summary>
+      <ul>
+        <li><strong>Mac:</strong> open the downloaded file and drag Hotdog into Applications. The first time, macOS asks whether to open an app from the internet: click <strong>Open</strong>. Hotdog is signed and checked by Apple.</li>
+        <li><strong>Windows:</strong> run the downloaded file. If Windows shows "Windows protected your PC", click <strong>More info</strong>, then <strong>Run anyway</strong>.</li>
+        <li><strong>Which Mac do I have?</strong> Apple menu → About This Mac. "Chip: Apple M…" is Apple Silicon, "Processor: Intel" is Intel.</li>
+        <li>After that, Hotdog updates itself: open <strong>Updates</strong> in the app and click <strong>Check for updates</strong>.</li>
+      </ul>
+    </details>
+
+    <footer>© RowCodes llc · <a href="https://github.com/ubgb/hotdog-releases/releases">All versions and release notes</a></footer>
+  </main>
+
+  <script>
+    (function () {
+      "use strict";
+      var LABELS = {
+        "mac-arm": ["Download for Mac", "For Macs with Apple Silicon (M1 or newer). Intel Mac? Use the link below."],
+        "mac-intel": ["Download for Mac (Intel)", "For Macs with an Intel processor. Newer Mac? Use the Apple Silicon link below."],
+        "windows": ["Download for Windows", "For 64-bit Windows 10 and 11."]
+      };
+
+      function webglRenderer() {
+        try {
+          var gl = document.createElement("canvas").getContext("webgl");
+          var info = gl && gl.getExtension("WEBGL_debug_renderer_info");
+          return info ? String(gl.getParameter(info.UNMASKED_RENDERER_WEBGL)) : "";
+        } catch (e) { return ""; }
+      }
+
+      function show(kind) {
+        var link = document.querySelector('#others a[data-kind="' + kind + '"]');
+        if (!link) return;
+        var primary = document.getElementById("primary");
+        primary.href = link.href;
+        primary.textContent = LABELS[kind][0];
+        document.getElementById("hint").textContent = LABELS[kind][1];
+        link.hidden = true;
+      }
+
+      async function detect() {
+        var ua = navigator.userAgent;
+        if (/Windows/i.test(ua)) return "windows";
+        if (!/Macintosh|Mac OS X/i.test(ua) || /iPhone|iPad/i.test(ua)) return null;
+        // Chrome and Edge can say the CPU directly.
+        try {
+          if (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) {
+            var values = await navigator.userAgentData.getHighEntropyValues(["architecture"]);
+            if (values.architecture === "arm") return "mac-arm";
+            if (values.architecture === "x86") return "mac-intel";
+          }
+        } catch (e) { /* fall through */ }
+        // Otherwise the graphics chip tells: Apple's own GPU means Apple Silicon.
+        var gpu = webglRenderer();
+        if (/Apple (M\d|GPU)/i.test(gpu)) return "mac-arm";
+        if (/Intel|AMD|Radeon/i.test(gpu)) return "mac-intel";
+        return "mac-arm"; // Most Macs sold since 2020; the Intel link stays visible below.
+      }
+
+      detect().then(function (kind) {
+        if (kind) show(kind);
+        else document.getElementById("hint").textContent = "Hotdog runs on Mac and Windows. Pick your download below.";
+      });
+
+      fetch("https://api.github.com/repos/ubgb/hotdog-releases/releases/latest", { headers: { Accept: "application/vnd.github+json" } })
+        .then(function (response) { return response.ok ? response.json() : null; })
+        .then(function (release) {
+          if (!release || !release.tag_name) return;
+          var date = release.published_at ? new Date(release.published_at).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" }) : "";
+          document.getElementById("version").textContent = "Version " + String(release.tag_name).replace(/^v/, "") + (date ? " · " + date : "");
+        })
+        .catch(function () { /* version line stays empty */ });
+    })();
+  </script>
+</body>
+</html>
