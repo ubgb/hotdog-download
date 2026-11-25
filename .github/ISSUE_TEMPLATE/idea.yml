@@ -1,0 +1,27 @@
+name: Suggest an idea
+description: Something you'd like Hotdog to do.
+title: "Idea: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Got an idea for Hotdog? Tell us what you'd like and why.
+
+        **This page is public.** Don't paste real IP addresses, radio or site names, SNMP communities, passwords or customer details.
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like Hotdog to do?
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why would it help?
+      description: What you do today without it, and how much time it would save.
+  - type: input
+    id: version
+    attributes:
+      label: Hotdog version
+      placeholder: "1.9.1"

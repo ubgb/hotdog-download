@@ -1,0 +1,51 @@
+name: Report a bug
+description: Something in Hotdog isn't working right.
+title: "Bug: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping make Hotdog better.
+
+        **This page is public.** Don't paste real IP addresses, radio or site names, SNMP communities, passwords or customer details. Swap them for made-up ones (like 192.0.2.10 or "Site A") and blur them in screenshots.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What went wrong, and any message Hotdog showed.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: What were you doing?
+      description: The steps that lead to it, so we can make it happen too.
+      placeholder: |
+        1. Opened the Dashboard
+        2. Clicked Check now
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect instead?
+  - type: input
+    id: version
+    attributes:
+      label: Hotdog version
+      description: Shown on the Updates tab.
+      placeholder: "1.9.1"
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Computer
+      placeholder: "Mac (Apple Silicon), Mac (Intel) or Windows"
+  - type: input
+    id: radio
+    attributes:
+      label: Radio model and firmware (if it's about a radio)
+      placeholder: "ALFOplus80HDX, 01.09.00"
